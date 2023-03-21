@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+
 description = "Kotlin version of the Spring Petclinic application"
 group = "org.springframework.samples"
 // Align with Spring Version
@@ -25,7 +28,8 @@ java {
 kotlin {
     compilerOptions {
         freeCompilerArgs.addAll("-Xjsr305=strict")
-    }
+        getOverriddenKotlinLanguageVersion(project)?.also { languageVersion = it }
+        getOverriddenKotlinApiVersion(project)?.also { apiVersion = it }
 }
 
 tasks.withType<Test> {
@@ -36,6 +40,7 @@ repositories {
     mavenCentral()
     maven { url = uri("https://repo.spring.io/snapshot") }
     maven { url = uri("https://repo.spring.io/milestone") }
+    getKotlinDevRepositoryUrl(project)?.also { maven(it) }
 }
 
 dependencies {
