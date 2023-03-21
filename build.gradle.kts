@@ -9,12 +9,11 @@ version = "3.0.4"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 plugins {
-    val kotlinVersion = "1.7.22"
     id("org.springframework.boot") version "3.0.4"
     id("io.spring.dependency-management") version "1.1.0"
     id("com.google.cloud.tools.jib") version "3.1.4"
-    kotlin("jvm") version kotlinVersion
-    kotlin("plugin.spring") version kotlinVersion
+    kotlin("jvm")
+    kotlin("plugin.spring")
 }
 
 val boostrapVersion = "5.1.3"
@@ -25,6 +24,8 @@ tasks {
         kotlinOptions {
             jvmTarget = "17"
             freeCompilerArgs = listOf("-Xjsr305=strict")
+            getOverriddenKotlinLanguageVersion(project)?.also { languageVersion = it }
+            getOverriddenKotlinApiVersion(project)?.also { apiVersion = it }
         }
     }
 }
@@ -37,6 +38,7 @@ repositories {
     mavenCentral()
     maven { url = uri("https://repo.spring.io/snapshot") }
     maven { url = uri("https://repo.spring.io/milestone") }
+    getKotlinDevRepositoryUrl(project)?.also { maven(it) }
 }
 
 dependencies {
