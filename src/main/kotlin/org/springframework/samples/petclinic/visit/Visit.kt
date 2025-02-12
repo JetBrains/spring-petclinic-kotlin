@@ -30,6 +30,7 @@ import jakarta.validation.constraints.NotEmpty
  */
 @Entity
 @Table(name = "visits")
+@Deprecated("test")
 class Visit : BaseEntity() {
 
     /**
