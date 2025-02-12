@@ -1,5 +1,4 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 description = "Kotlin version of the Spring Petclinic application"
 group = "org.springframework.samples"
@@ -7,12 +6,11 @@ group = "org.springframework.samples"
 version = "3.5.3"
 
 plugins {
-    val kotlinVersion = "2.2.21"
     id("org.springframework.boot") version "3.5.7"
     id("io.spring.dependency-management") version "1.1.7"
     id("com.google.cloud.tools.jib") version "3.4.5"
-    kotlin("jvm") version kotlinVersion
-    kotlin("plugin.spring") version kotlinVersion
+    kotlin("jvm")
+    kotlin("plugin.spring")
 }
 
 val boostrapVersion = "5.3.8"
@@ -28,51 +26,52 @@ java {
 kotlin {
     compilerOptions {
         freeCompilerArgs.addAll("-Xjsr305=strict")
-        getOverriddenKotlinLanguageVersion(project)?.also { languageVersion = it }
-        getOverriddenKotlinApiVersion(project)?.also { apiVersion = it }
-}
+        getOverriddenKotlinLanguageVersion(project)?.also { languageVersion.set(KotlinVersion.fromVersion(it)) }
+        getOverriddenKotlinApiVersion(project)?.also { apiVersion.set(KotlinVersion.fromVersion(it)) }
+    }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
-}
+    tasks.withType<Test> {
+        useJUnitPlatform()
+    }
 
-repositories {
-    mavenCentral()
-    maven { url = uri("https://repo.spring.io/snapshot") }
-    maven { url = uri("https://repo.spring.io/milestone") }
-    getKotlinDevRepositoryUrl(project)?.also { maven(it) }
-}
+    repositories {
+        mavenCentral()
+        maven { url = uri("https://repo.spring.io/snapshot") }
+        maven { url = uri("https://repo.spring.io/milestone") }
+        getKotlinDevRepositoryUrl(project)?.also { maven(it) }
+    }
 
-dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springframework.boot:spring-boot-starter-cache")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.glassfish.jaxb:jaxb-runtime")
-    implementation("javax.cache:cache-api")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.webjars.npm:bootstrap:$boostrapVersion")
-    implementation("org.webjars.npm:font-awesome:$fontAwesomeVersion")
+    dependencies {
+        implementation("org.springframework.boot:spring-boot-starter-actuator")
+        implementation("org.springframework.boot:spring-boot-starter-cache")
+        implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+        implementation("org.springframework.boot:spring-boot-starter-validation")
+        implementation("org.springframework.boot:spring-boot-starter-web")
+        implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+        implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+        implementation("org.glassfish.jaxb:jaxb-runtime")
+        implementation("javax.cache:cache-api")
+        implementation("org.jetbrains.kotlin:kotlin-reflect")
+        implementation("org.webjars.npm:bootstrap:$boostrapVersion")
+        implementation("org.webjars.npm:font-awesome:$fontAwesomeVersion")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.boot:spring-boot-starter-webflux")
-    testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+        testImplementation("org.springframework.boot:spring-boot-starter-test")
+        testImplementation("org.springframework.boot:spring-boot-starter-webflux")
+        testImplementation("org.junit.jupiter:junit-jupiter-api")
+        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 
-    runtimeOnly("com.h2database:h2")
-    runtimeOnly("com.mysql:mysql-connector-j")
-    runtimeOnly("org.webjars:webjars-locator-lite:${webjarsLocatorLiteVersion}")
+        runtimeOnly("com.h2database:h2")
+        runtimeOnly("com.mysql:mysql-connector-j")
+        runtimeOnly("org.webjars:webjars-locator-lite:${webjarsLocatorLiteVersion}")
 
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
-}
+        developmentOnly("org.springframework.boot:spring-boot-devtools")
+    }
 
-jib {
-    to {
-        image = "springcommunity/spring-petclinic-kotlin"
-        tags = setOf(project.version.toString(), "latest")
+    jib {
+        to {
+            image = "springcommunity/spring-petclinic-kotlin"
+            tags = setOf(project.version.toString(), "latest")
+        }
     }
 }
 
