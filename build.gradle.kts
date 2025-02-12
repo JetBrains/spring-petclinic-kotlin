@@ -23,7 +23,7 @@ tasks {
     withType<KotlinCompile> {
         kotlinOptions {
             jvmTarget = "17"
-            freeCompilerArgs = listOf("-Xjsr305=strict")
+            freeCompilerArgs = listOf("-Xjsr305=strict", "-Xrender-internal-diagnostic-names")
             getOverriddenKotlinLanguageVersion(project)?.also { languageVersion = it }
             getOverriddenKotlinApiVersion(project)?.also { apiVersion = it }
         }

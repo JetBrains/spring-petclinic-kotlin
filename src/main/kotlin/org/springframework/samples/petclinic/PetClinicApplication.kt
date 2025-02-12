@@ -29,4 +29,8 @@ class PetClinicApplication
 
 fun main(args: Array<String>) {
     runApplication<PetClinicApplication>(*args)
+    tst(1.0)
 }
+
+@Deprecated("for test")
+fun tst(a: Double): Double = a / 0
