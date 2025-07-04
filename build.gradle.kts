@@ -25,7 +25,17 @@ java {
 
 kotlin {
     compilerOptions {
-        freeCompilerArgs.addAll("-Xjsr305=strict")
+        freeCompilerArgs.addAll(
+            "-Xjsr305=strict",
+            "-Xreport-all-warnings",
+            "-Xrender-internal-diagnostic-names",
+            "-Xuse-fir-experimental-checkers"
+            )
+        extraWarnings.set(true)
+        allWarningsAsErrors.set(false)
+        project.findProperty("kotlin_additional_cli_options")?.let {
+            freeCompilerArgs.addAll((it as String).trim().split(" ").toList())
+        }
         getOverriddenKotlinLanguageVersion(project)?.also { languageVersion.set(KotlinVersion.fromVersion(it)) }
         getOverriddenKotlinApiVersion(project)?.also { apiVersion.set(KotlinVersion.fromVersion(it)) }
     }
