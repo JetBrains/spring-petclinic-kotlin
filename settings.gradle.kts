@@ -11,7 +11,7 @@ pluginManagement {
 
     val kotlin_version: String? by settings
     plugins {
-        kotlin("jvm") version (kotlin_version ?: "2.2.0")
-        kotlin("plugin.spring") version (kotlin_version ?: "2.2.0")
+        kotlin("jvm") version (kotlin_version ?: "2.3.0-Beta2")
+        kotlin("plugin.spring") version (kotlin_version ?: "2.3.0-Beta2")
     }
 }
