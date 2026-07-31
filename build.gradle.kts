@@ -6,17 +6,18 @@ group = "org.springframework.samples"
 version = "4.0.2"
 
 plugins {
-    val kotlinVersion = "2.4.10"
     id("org.springframework.boot") version "4.1.0"
     id("io.spring.dependency-management") version "1.1.7"
     id("com.google.cloud.tools.jib") version "3.5.4"
-    kotlin("jvm") version kotlinVersion
-    kotlin("plugin.spring") version kotlinVersion
+    kotlin("jvm")
+    kotlin("plugin.spring")
 }
 
 val boostrapVersion = "5.3.8"
 val fontAwesomeVersion = "4.7.0"
 val webjarsLocatorLiteVersion = "1.1.4"
+val kotlin_repo_url = providers.gradleProperty("kotlin_repo_url").orElse("N/A")
+val kotlin_version = providers.gradleProperty("kotlin_version").orElse("N/A")
 
 java {
     toolchain {
@@ -49,7 +50,16 @@ kotlin {
         mavenCentral()
         maven { url = uri("https://repo.spring.io/snapshot") }
         maven { url = uri("https://repo.spring.io/milestone") }
-        getKotlinDevRepositoryUrl(project)?.also { maven(it) }
+        if (kotlin_repo_url.get().isNotEmpty() && kotlin_version.get().isNotEmpty()) {
+            exclusiveContent {
+                forRepository {
+                    maven(kotlin_repo_url)
+                }
+                filter {
+                    includeVersionByRegex("org.jetbrains.kotlin", ".*", kotlin_version.get())
+                }
+            }
+        }
     }
 
 dependencies {
