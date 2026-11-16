@@ -5,6 +5,7 @@ pluginManagement {
     val kotlin_version = providers.gradleProperty("kotlin_version").orElse("N/A")
 
     repositories {
+        mavenCentral()
 		maven { url = uri("https://repo.spring.io/snapshot") }
 		maven { url = uri("https://repo.spring.io/milestone") }
 		gradlePluginPortal()
